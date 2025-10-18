@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        header, footer {
+            background-color: green;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .Input {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: lightgray;
+            margin: 15px auto;
+            max-width: 300px;
+            width: 100%;
+            border-radius: 10px;
+            padding: 20px; /* added for better spacing */
+        }
+
+        .Output {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        /* Heading */
+        .Output h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: left; /* optional: left-align heading */
+        }
+
+        /* Preformatted text box */
+        .Output pre {
+            background: #f8f9fb;           /* light background */
+            border-left: 5px solid #4A90E2; /* accent line */
+            border-radius: 10px;
+            padding: 25px 30px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #2c3e50;
+            line-height: 1.6;              /* improved spacing */
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            width: 100%;
+            max-width: 600px;              /* keeps it neat on large screens */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Agent Unveil</h1>
+    </header>
+
+    <main>
+        <h2>About</h2>
+        <p>The Ai Agent which will identify the misleading product advertisment to help get the true product.</p>
+    </main>
+        <div class="Input">
+            <h1>Upload the AD</h1>
+            <form action="/process" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" accept="image/*" required id="imageInput">
+                <br>
+                <br>
+                <img id="preview" src="" alt="Image Preview" style="max-width: 300px; display: none; border-radius: 8px;"/>
+                <br>
+                <button type="submit">Process</button>
+            </form>
+
+        </div>
+        <script>
+            const imageInput = document.getElementById('imageInput');
+            const preview = document.getElementById('preview');
+
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.addEventListener("load", function() {
+                        preview.setAttribute("src", this.result);
+                        preview.style.display = "block"; // show the image
+                    });
+
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.setAttribute("src", "");
+                    preview.style.display = "none";
+                }
+            });
+        </script>
+        <div class="Output">
+            {% if extracted_text %}
+                <h2>Findings</h2>
+                <pre>{{ extracted_text }}</pre>
+            {% endif %}
+        </div>
+    <footer>
+        <p>&copy; 2025 AIgnition </p>
+    </footer>
+
+</body>
+</html>
