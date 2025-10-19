@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request
 import cv2
 import numpy as np
-import pytesseract
-from transformers import pipeline
+import easyocr
+# from transformers import pipeline
 import spacy
 from keybert import KeyBERT
+reader = easyocr.Reader(['en'])
 
 app = Flask(__name__)
 
@@ -26,7 +27,9 @@ def process_image():
             img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
             grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             cv2.imwrite("grey.png", grey)
-            text = pytesseract.image_to_string(grey)
+            result = reader.readtext(grey)
+            text = " ".join([res[1] for res in result])
+            # text = pytesseract.image_to_string(grey)
             # summarizer = pipeline("summarization",model="sshleifer/distilbart-cnn-12-6")
             # summary = summarizer(text,max_length=69)
             nlp = spacy.load("en_core_web_sm")
