@@ -1,0 +1,4 @@
+Flask==3.1.2
+numpy==1.27.6
+opencv-python==4.9.0.73
+easyocr==1.7.0
