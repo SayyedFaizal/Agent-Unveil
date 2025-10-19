@@ -5,10 +5,10 @@ import numpy as np
 # import pytesseract
 import easyocr
 # from transformers import pipeline
-import spacy
+# import spacy
 # from keybert import KeyBERT
 reader = easyocr.Reader(['en'], gpu=False)
-nlp = spacy.load("en_core_web_sm")
+# nlp = spacy.load("en_core_web_sm")
 
 app = Flask(__name__)
 
@@ -32,8 +32,8 @@ def process_image():
             cv2.imwrite("grey.png", grey)
             result = reader.readtext(grey)
             text = " ".join([res[1] for res in result])
-            doc = nlp(text)
-            urls = [ent.text for ent in doc if ent.like_url]
+            # doc = nlp(text)
+            # urls = [ent.text for ent in doc if ent.like_url]
             # text = pytesseract.image_to_string(grey)
             # summarizer = pipeline("summarization",model="sshleifer/distilbart-cnn-12-6")
             # summary = summarizer(text,max_length=69)
@@ -46,12 +46,12 @@ def process_image():
             # for k in keywords:
             #     keys += k[0]+"<br>"
             # output_text = f'{text} <br><b>Extracted Urls present in the image - </b>{urls} <br><b>Keywords to Search:</b><br>{keys}'
-            output_text = f'{text} <br><b>Extracted Urls present in the image - </b>{urls}'
+            output_text = text
             return render_template('index.html', extracted_text=output_text)
         except Exception as e:
             return f"An error occured: {e}", 500
         
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render dynamic port
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
