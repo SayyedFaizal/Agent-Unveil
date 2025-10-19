@@ -37,7 +37,7 @@
             max-width: 300px;
             width: 100%;
             border-radius: 10px;
-            padding: 20px; /* added for better spacing */
+            padding: 20px; 
         }
 
         .Output {
@@ -48,30 +48,58 @@
             width: 100%;
         }
 
-        /* Heading */
+        
         .Output h2 {
             font-size: 24px;
             margin-bottom: 15px;
             color: #333;
-            text-align: left; /* optional: left-align heading */
+            text-align: left; 
         }
 
-        /* Preformatted text box */
+        
         .Output pre {
-            background: #f8f9fb;           /* light background */
-            border-left: 5px solid #4A90E2; /* accent line */
+            background: #f8f9fb;          
+            border-left: 5px solid #4A90E2; 
             border-radius: 10px;
             padding: 25px 30px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.08);
             font-family: 'Courier New', monospace;
             font-size: 15px;
             color: #2c3e50;
-            line-height: 1.6;              /* improved spacing */
+            line-height: 1.6;              
             overflow-x: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
             width: 100%;
-            max-width: 600px;              /* keeps it neat on large screens */
+            max-width: 600px;              
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        .loading-text {
+            font-size: 20px;
+            color: #555;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -87,7 +115,7 @@
     </main>
         <div class="Input">
             <h1>Upload the AD</h1>
-            <form action="/process" method="post" enctype="multipart/form-data">
+            <form action="/process" method="post" enctype="multipart/form-data" id="inputForm">
                 <input type="file" name="image" accept="image/*" required id="imageInput">
                 <br>
                 <br>
@@ -118,10 +146,24 @@
                 }
             });
         </script>
+        <div class="loader-container">
+        <div id="loader" class="loader"></div>
+        <div id="loading-text" class="loading-text">&#129300; Understanding... Please wait!</div>
+        </div>
+        <script>
+        const form = document.getElementById('inputForm');
+        const loader = document.getElementById('loader');
+        const loadingText = document.getElementById('loading-text');
+
+        form.addEventListener('submit', () => {
+            loader.style.display = 'block';
+            loadingText.style.display = 'block';
+        });
+    </script>
         <div class="Output">
             {% if extracted_text %}
                 <h2>Findings</h2>
-                <pre>{{ extracted_text }}</pre>
+                <pre>{{ extracted_text|safe }}</pre>
             {% endif %}
         </div>
     <footer>
